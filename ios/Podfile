@@ -1,3 +1,4 @@
+# Required by Expo
 require File.join(File.dirname(`node --print "require.resolve('expo/package.json')"`), "scripts/autolinking")
 require File.join(File.dirname(`node --print "require.resolve('react-native/package.json')"`), "scripts/react_native_pods")
 
@@ -8,28 +9,18 @@ ENV['RCT_NEW_ARCH_ENABLED'] = podfile_properties['newArchEnabled'] == 'true' ? '
 ENV['EX_DEV_CLIENT_NETWORK_INSPECTOR'] = podfile_properties['EX_DEV_CLIENT_NETWORK_INSPECTOR']
 
 platform :ios, podfile_properties['ios.deploymentTarget'] || '13.0'
-install! 'cocoapods',
-  :deterministic_uuids => false
+install! 'cocoapods', :deterministic_uuids => false
+
+# Global setting for modular headers
+use_modular_headers!
 
 prepare_react_native_project!
 
-# If you are using a `react-native-flipper` your iOS build will fail when `NO_FLIPPER=1` is set.
-# because `react-native-flipper` depends on (FlipperKit,...), which will be excluded. To fix this,
-# you can also exclude `react-native-flipper` in `react-native.config.js`
-#
-# ```js
-# module.exports = {
-#   dependencies: {
-#     ...(process.env.NO_FLIPPER ? { 'react-native-flipper': { platforms: { ios: null } } } : {}),
-#   }
-# }
-# ```
+# Flipper Configuration (can be adjusted as per need)
 flipper_config = FlipperConfiguration.disabled
 if ENV['NO_FLIPPER'] == '1' then
-  # Explicitly disabled through environment variables
   flipper_config = FlipperConfiguration.disabled
 elsif podfile_properties.key?('ios.flipper') then
-  # Configure Flipper in Podfile.properties.json
   if podfile_properties['ios.flipper'] == 'true' then
     flipper_config = FlipperConfiguration.enabled(["Debug", "Release"])
   elsif podfile_properties['ios.flipper'] != 'false' then
@@ -44,18 +35,21 @@ target 'MWYogiCup' do
   use_frameworks! :linkage => podfile_properties['ios.useFrameworks'].to_sym if podfile_properties['ios.useFrameworks']
   use_frameworks! :linkage => ENV['USE_FRAMEWORKS'].to_sym if ENV['USE_FRAMEWORKS']
 
-  # Flags change depending on the env values.
   flags = get_default_flags()
 
   use_react_native!(
     :path => config[:reactNativePath],
     :hermes_enabled => podfile_properties['expo.jsEngine'] == nil || podfile_properties['expo.jsEngine'] == 'hermes',
     :fabric_enabled => flags[:fabric_enabled],
-    # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/..",
-    # Note that if you have use_frameworks! enabled, Flipper will not work if enabled
     :flipper_configuration => flipper_config
   )
+
+  # Firebase Pods
+  pod 'Firebase/Auth', :modular_headers => true
+  pod 'Firebase/Firestore', :modular_headers => true
+  pod 'Firebase/Storage', :modular_headers => true
+  pod 'Firebase/Messaging', :modular_headers => true
 
   post_install do |installer|
     react_native_post_install(
@@ -65,8 +59,6 @@ target 'MWYogiCup' do
     )
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
 
-    # This is necessary for Xcode 14, because it signs resource bundles by default
-    # when building for devices.
     installer.target_installation_results.pod_target_installation_results
       .each do |pod_name, target_installation_result|
       target_installation_result.resource_bundle_targets.each do |resource_bundle_target|
