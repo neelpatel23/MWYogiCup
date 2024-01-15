@@ -22,7 +22,7 @@ import { signInWithEmailAndPassword } from '@firebase/auth';
 import { auth, database } from '../../config/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import colors from '../../globalStyles/colors';
-const logoImage = require('../../assets/logo1.png'); // Replace with the path to your logo image
+const logoImage = require('../../assets/logo2.png'); // Replace with the path to your logo image
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState('');
@@ -103,7 +103,7 @@ export default function Login({ navigation }) {
             autoCapitalize="none"
             autoCorrect={false}
             keyboardType="number-pad"
-            textContentType="bkid"
+            textContentType="creditCardNumber"
             autoFocus={true}
             value={bkID}
             onChangeText={(text) => setbkID(text)}
