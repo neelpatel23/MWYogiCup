@@ -1,4 +1,4 @@
-package com.mwyogicup;
+package com.neelpatel.mwyogicup;
 
 import android.os.Build;
 import android.os.Bundle;

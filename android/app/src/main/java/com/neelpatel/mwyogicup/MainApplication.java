@@ -1,4 +1,4 @@
-package com.mwyogicup;
+package com.neelpatel.mwyogicup;
 
 import android.app.Application;
 import android.content.res.Configuration;

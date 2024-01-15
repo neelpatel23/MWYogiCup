@@ -5,7 +5,6 @@ import {
   View,
   ScrollView,
   TextInput,
-  SafeAreaView,
   TouchableOpacity,
   StatusBar,
   Alert,
@@ -15,6 +14,9 @@ import {
   Keyboard,
   Platform
 } from 'react-native';
+
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 
 import { signInWithEmailAndPassword } from '@firebase/auth';
 import { auth, database } from '../../config/firebase';
