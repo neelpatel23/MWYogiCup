@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "690502272348",
+    "project_id": "mwyogicup-9320c",
+    "storage_bucket": "mwyogicup-9320c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:690502272348:android:048a84c8b1089e1a8c6d99",
+        "android_client_info": {
+          "package_name": "com.neelpatel.mwyogicup"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKv8BxdACXLu5VMAoiqN0X4LCL5d_T0do"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

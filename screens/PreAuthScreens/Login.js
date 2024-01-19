@@ -12,7 +12,7 @@ import {
   ActivityIndicator,
   Image,
   Keyboard,
-  Platform
+  Platform,
 } from 'react-native';
 
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -21,8 +21,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { signInWithEmailAndPassword } from '@firebase/auth';
 import { auth, database } from '../../config/firebase';
 import { doc, getDoc } from 'firebase/firestore';
-import colors from '../../globalStyles/colors';
-const logoImage = require('../../assets/logo2.png'); // Replace with the path to your logo image
+import colors from '../../globalVariables/colors';
+const logoImage = require('../../assets/logo1.png'); // Replace with the path to your logo image
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState('');
@@ -132,7 +132,7 @@ export default function Login({ navigation }) {
             onChangeText={(text) => setPassword(text)}
           />
           {loading ? (
-            <ActivityIndicator size="large" color={colors.primary} />
+            <ActivityIndicator size="large" color="#fff" />
           ) : (
             <TouchableOpacity style={styles.button} onPress={onHandleLogin}>
               <Text style={styles.buttonText}> Log In</Text>
@@ -145,9 +145,14 @@ export default function Login({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#21336a",
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -158,7 +163,7 @@ const styles = StyleSheet.create({
   },
   scrollViewContent: {
     flexGrow: 1,
-    justifyContent: 'center',
+    // justifyContent: 'center',
     alignItems: 'center',
   },
   logo: {
@@ -176,7 +181,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   button: {
-    backgroundColor: colors.primary,
+    backgroundColor: "#f16827",
     width: '70%',
     borderRadius: 10,
     padding: 15,

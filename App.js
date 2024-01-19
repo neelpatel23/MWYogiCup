@@ -1,20 +1,31 @@
 import React, { useState, createContext, useContext, useEffect } from 'react';
-import { View, ActivityIndicator, StyleSheet } from 'react-native';
+import { View, ActivityIndicator, StyleSheet, Image } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './config/firebase';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Provider as PaperProvider } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/Ionicons'
+import { OneSignal } from 'react-native-onesignal';
 
 import Login from './screens/PreAuthScreens/Login';
 import Home from './screens/PostAuthScreens/Home';
 import * as SplashScreen from 'expo-splash-screen';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import colors from './globalVariables/colors';
+import keys from './globalVariables/keys';
+import AnnouncementTab from './screens/PostAuthScreens/AnnoucementTab/Annoucement';
+import NewAnnouncement from './screens/PostAuthScreens/AnnoucementTab/NewAnnoucement';
 
 const Stack = createStackNavigator();
-const Tab = createMaterialBottomTabNavigator();
+const Tab = createBottomTabNavigator();
 const AuthenticatedUserContext = createContext({});
+OneSignal.initialize(keys.pushNotifsAPIKey)
+OneSignal.Notifications.requestPermission(true);
+
+// Method for listening for notification clicks
+OneSignal.Notifications.addEventListener('click', (event) => {
+  console.log('OneSignal: notification clicked:', event);
+});
 
 const AuthenticatedUserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -25,6 +36,38 @@ const AuthenticatedUserProvider = ({ children }) => {
   );
 };
 
+function AnnoucementStack({ navigation}) {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Announcements"
+        component={AnnouncementTab}
+        options={{
+          headerShown: true,
+          headerTitle: 'Announcements',
+          headerStyle: {
+            backgroundColor: '#EFEFEF',
+            borderBottomWidth: 1,
+            borderBottomColor: colors.primary
+          },
+        }}
+      />
+      <Stack.Screen 
+        name="NewAnnouncement" 
+        component={NewAnnouncement} 
+        options={{ 
+          headerTitle: "New Announcement",
+          headerStyle: {
+            backgroundColor: '#EFEFEF', // Apply the same header style for consistency
+            borderBottomWidth: 1,
+            borderBottomColor: colors.primary
+          },
+        }} 
+      />
+    </Stack.Navigator>
+  )
+}
+
 const MainStack = () => {
   return (
     <Tab.Navigator
@@ -33,25 +76,105 @@ const MainStack = () => {
       inactiveColor="lightgray"
       barStyle={styles.bottomTabStyle}
       screenOptions={({ route }) => ({
-        tabBarIcon: ({ color }) => {
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: 'gray',
+        tabBarLabelStyle: {
+          fontSize: 12,
+        },
+        tabBarStyle: {
+          // padding: 10,
+          display: 'flex',
+          // backgroundColor: '#EFEFEF',
+        },
+        tabBarIcon: ({ focused, color, size }) => {
           let iconName;
-          switch (route.name) {
-            case 'Home':
-              iconName = 'clock';
-              break;
-            case 'Tasks':
-              iconName = 'format-list-checkbox';
-              break;
-            // Add more cases for other tabs
-            default:
-              iconName = 'circle';
+          if (route.name === 'Announcements') {
+            iconName = focused ? 'notifications-outline' : 'notifications-outline';
+          } else if (route.name === 'Teams') {
+            iconName = focused ? 'basketball-outline' : 'basketball-outline'; // Choose appropriate icons
+          } else if (route.name === 'Reels') {
+            iconName = focused ? 'camera-outline' : 'camera-outline'; // Choose appropriate icons
+          } else if (route.name === 'Schedule') {
+            iconName = focused ? 'calendar-outline' : 'calendar-outline'
+          } else if (route.name === 'Satsang') {
+            iconName = focused ? 'book-outline' : 'book-outline'
           }
-          return <MaterialCommunityIcons name={iconName} size={26} color={color} />;
+          return <Icon name={iconName} size={25} color={color} style={{ padding: 5, }} />;
         },
       })}
     >
-      <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Tasks" component={Home} />
+      <Tab.Screen 
+        name="Announcements" 
+        component={AnnoucementStack} 
+        options={{ 
+          tabBarShowLabel: false,
+          headerShown: false, 
+          headerStyle: {
+            backgroundColor: '#EFEFEF', // Apply the same header style for consistency
+            borderBottomWidth: 1,
+            borderBottomColor: colors.primary
+          } 
+        }} 
+      />
+      <Tab.Screen 
+        name="Schedule" 
+        component={Home} 
+        options={{ 
+          headerShown: true, 
+          tabBarShowLabel: false,
+          headerStyle: {
+            backgroundColor: '#EFEFEF', // Apply the same header style for consistency
+            borderBottomWidth: 1,
+            borderBottomColor: colors.primary
+          } 
+        }} 
+      />
+      <Tab.Screen 
+        name="Satsang" 
+        component={Home} 
+        options={{ 
+          headerShown: true, 
+          tabBarShowLabel: false,
+          // tabBarIcon: ({ focused, color, size }) => {
+          //   return <Image 
+          //           source={require('./assets/baps.png')}
+          //           style={{ width: 18, height: 18 }}
+          //         />;
+          // },
+          headerStyle: {
+            backgroundColor: '#EFEFEF',
+            borderBottomWidth: 1,
+            borderBottomColor: colors.primary
+          } 
+        }} 
+      />
+      <Tab.Screen 
+        name="Teams" 
+        component={Home} 
+        options={{ 
+          headerShown: true, 
+          tabBarShowLabel: false,
+          headerStyle: {
+            backgroundColor: '#EFEFEF', // Apply the same header style for consistency
+            borderBottomWidth: 1,
+            borderBottomColor: colors.primary
+          } 
+        }} 
+      />
+      <Tab.Screen 
+        name="Reels" 
+        component={Home} 
+        options={{ 
+          headerShown: true, 
+          tabBarShowLabel: false,
+          headerStyle: {
+            backgroundColor: '#EFEFEF', // Apply the same header style for consistency
+            borderBottomWidth: 1,
+            borderBottomColor: colors.primary
+          } 
+        }} 
+      />
+      
       {/* Add more Tab.Screen for other tabs */}
     </Tab.Navigator>
   );
@@ -98,11 +221,11 @@ const RootNavigator = () => {
 
 const App = () => {
   return (
-    <PaperProvider>
+    // <PaperProvider>
       <AuthenticatedUserProvider>
         <RootNavigator />
       </AuthenticatedUserProvider>
-    </PaperProvider>
+    // </PaperProvider>
   )
 }
 

@@ -11,6 +11,11 @@
     },
     "ios": {
       "bundleIdentifier": "com.neelpatel.mwyogicup"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "2069c57a-a465-4e0c-ac8a-b13205027a1a"
+      }
     }
   }
 }
