@@ -105,11 +105,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
-    backgroundColor: '#f5f5f5'
+    backgroundColor: colors.universalBg
   },
   card: {
     marginVertical: 8,
-    elevation: 4,
+    // elevation: 4,
+    backgroundColor: colors.universalBg
   },
   cardHeader: {
     flexDirection: 'row',
@@ -123,6 +124,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   button: {
+    backgroundColor: colors.primary,
     marginHorizontal: 4,
   },
   centered: {

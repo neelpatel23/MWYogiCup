@@ -1,6 +1,6 @@
 export default {
-    primary: '#8A2BE2',
-    gray: '#C5C5C7',
+    primary: '#F2682A',
+    yogiCupBlue: '#193768',
     mediumGray: '#F6F7FB',
     lightGray: '#FAFAFA',
     accent: '#f57c00',

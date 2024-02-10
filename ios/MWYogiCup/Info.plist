@@ -7,9 +7,11 @@
     <key>CFBundleDevelopmentRegion</key>
     <string>$(DEVELOPMENT_LANGUAGE)</string>
     <key>CFBundleDisplayName</key>
-    <string>MWYogiCup</string>
+    <string>MW Yogi Cup</string>
     <key>CFBundleExecutable</key>
     <string>$(EXECUTABLE_NAME)</string>
+    <key>CFBundleIconName</key>
+    <string>AppIcon</string>
     <key>CFBundleIdentifier</key>
     <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
     <key>CFBundleInfoDictionaryVersion</key>
@@ -50,6 +52,17 @@
         </dict>
       </dict>
     </dict>
+    <key>NSCameraUsageDescription</key>
+    <string>Allow $(PRODUCT_NAME) to access your camera.</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>This app uses your location when photos are uploaded from gallery to provide for accurate metadata for storage and retrieval.</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>Allow $(PRODUCT_NAME) to access your microphone</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>This app uses access to the media library to upload photos into the feed through this years Yogi Cup.
+  </string>
+    <key>RCTRootViewBackgroundColor</key>
+    <integer>4280365930</integer>
     <key>UIBackgroundModes</key>
     <array>
       <string>remote-notification</string>
@@ -62,8 +75,6 @@
     </array>
     <key>UIRequiresFullScreen</key>
     <false/>
-    <key>UIStatusBarStyle</key>
-    <string/>
     <key>UISupportedInterfaceOrientations</key>
     <array>
       <string>UIInterfaceOrientationPortrait</string>

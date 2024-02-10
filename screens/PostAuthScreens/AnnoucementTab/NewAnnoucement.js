@@ -14,17 +14,17 @@ const NewAnnouncement = ({ navigation }) => {
 
   useEffect(() => {
     const fetchUserInfo = async () => {
-      const userRef = doc(database, 'users', auth.currentUser.uid);
+      const userRef = doc(database, 'userDATA', auth.currentUser.uid);
       const docSnap = await getDoc(userRef);
       if (docSnap.exists()) {
         setUserFirstName(docSnap.data().firstName);
-        setUserRole(docSnap.data().role);
+        setUserRole(docSnap.data().userRole);
       }
     };
 
     fetchUserInfo();
 
-    const q = query(collection(database, 'announcements'), where('userId', '==', auth.currentUser.uid));
+    const q = query(collection(database, 'announcements'));
     const unsubscribe = onSnapshot(q, (snapshot) => {
       setPreviousAnnouncements(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
     });

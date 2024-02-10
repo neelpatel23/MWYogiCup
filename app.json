@@ -1,11 +1,17 @@
 {
   "expo": {
-    "name": "MWYogiCup",
+    "name": "MW Yogi Cup",
     "slug": "MWYogiCup",
+    "icon": "./assets/logo1.png",
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
     ],
+    "splash": {
+      "image": "./assets/basketball.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#21336A"
+    },
     "android": {
       "package": "com.neelpatel.mwyogicup"
     },
@@ -16,6 +22,14 @@
       "eas": {
         "projectId": "2069c57a-a465-4e0c-ac8a-b13205027a1a"
       }
-    }
+    },
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
+        }
+      ]
+    ]
   }
 }

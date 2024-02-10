@@ -1,88 +1,48 @@
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { Appbar, Card, Title, Paragraph } from 'react-native-paper';
-import { signOut } from 'firebase/auth';
-import { auth } from '../../config/firebase';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import React, { useRef, useEffect } from 'react';
+import { Animated, StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 
-const Home = ({ userDisplayName, navigation }) => {
-    const handleAccountPress = () => {
-        // Navigation logic to account page
-        console.log('Navigate to Account Page');
-        // navigation.navigate('AccountPage'); // Uncomment and use your navigation logic
-    };
+export default function Home() {
+  const animatedValue = useRef(new Animated.Value(0)).current;
 
-    return (
-        <View style={styles.container}>
-            {/* <Appbar.Header>
-                <Appbar.Content title={`Jay Swaminarayan, ${userDisplayName} bhai`} />
-                <Appbar.Action icon="account-circle" onPress={handleAccountPress} />
-            </Appbar.Header> */}
+  useEffect(() => {
+    Animated.timing(animatedValue, {
+      toValue: 1,
+      duration: 1000,
+      useNativeDriver: true,
+    }).start();
+  }, []);
 
-            <ScrollView style={styles.scrollView}>
-                <View style={styles.section}>
-                    <Card style={styles.card}>
-                        <Card.Content>
-                            <Title>Upcoming Games</Title>
-                            <Paragraph>Check out the schedule for the next exciting matches!</Paragraph>
-                        </Card.Content>
-                        <Card.Cover source={{ uri: 'https://example.com/game-schedule-image.jpg' }} />
-                    </Card>
-                </View>
+  const translateY = animatedValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [-100, 0],
+  });
 
-                <View style={styles.section}>
-                    <Card style={styles.card}>
-                        <Card.Content>
-                            <Title>Leaderboard</Title>
-                            <Paragraph>See who's leading in the tournament right now!</Paragraph>
-                        </Card.Content>
-                        <Card.Cover source={{ uri: 'https://example.com/leaderboard-image.jpg' }} />
-                    </Card>
-                </View>
-
-                <View style={styles.section}>
-                    <Card style={styles.card}>
-                        <Card.Content>
-                            <Title>Latest News</Title>
-                            <Paragraph>Stay updated with the latest news and updates from the tournament.</Paragraph>
-                        </Card.Content>
-                    </Card>
-                </View>
-
-                <TouchableOpacity 
-                    style={styles.rulesButton}
-                    onPress={() => signOut(auth)}>
-                    <Text style={styles.rulesButtonText}>Tournament Rules & FAQs</Text>
-                </TouchableOpacity>
-            </ScrollView>
-        </View>
-    );
-};
+  return (
+    <View style={styles.container}>
+      <Animated.View style={[styles.box, { transform: [{ translateY }] }]}>
+        <Text style={styles.text}>Hello, Animated World!</Text>
+      </Animated.View>
+    </View>
+  );
+}
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    scrollView: {
-        margin: 10,
-    },
-    section: {
-        marginBottom: 20,
-    },
-    card: {
-        elevation: 4,
-    },
-    rulesButton: {
-        backgroundColor: '#4a90e2',
-        padding: 15,
-        alignItems: 'center',
-        borderRadius: 5,
-    },
-    rulesButtonText: {
-        color: 'white',
-        fontSize: 16,
-        fontWeight: 'bold',
-    },
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  box: {
+    width: 200,
+    height: 200,
+    backgroundColor: 'skyblue',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  text: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#fff',
+  },
 });
-
-export default Home;
