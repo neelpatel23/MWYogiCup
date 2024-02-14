@@ -104,7 +104,7 @@ const Polls = () => {
             }
           });
         });
-
+ 
         // Increment the vote count for the selected choice in totalVotesPollsDATA
         const totalVotesRef = doc(database, 'totalVotesPollsDATA', pollId);
         const totalVotesSnapshot = await getDoc(totalVotesRef);
@@ -136,7 +136,11 @@ const Polls = () => {
         {loading ? (
           <ActivityIndicator size="large" color={colors.primary} />
         ) : polls.length === 0 ? (
-          <Text style={styles.noPollsText}>No polls exist. Check back later.</Text>
+          <TouchableOpacity>
+            <Text style={styles.noContentText}>
+              No polls exist. Check back later.
+            </Text>
+          </TouchableOpacity>
         ) : (
           polls.map(poll => (
             <View key={poll.id}>
@@ -180,34 +184,47 @@ const Polls = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.white,
+    backgroundColor: colors.yogiCupBlue,
   },
   scrollView: {
     padding: 16,
   },
   card: {
+    borderWidth: 1,
+    // borderColor: colors.primary,
     marginBottom: 16,
+    backgroundColor: colors.cardBg
   },
   title: {
+    color: 'black',
     marginBottom: 16,
+    fontWeight: 'bold',
     fontSize: 20,
+  },
+  noContentText: {
+    fontSize: 16,
+    color: 'gray',
+    textAlign: 'center',
+    marginTop: 20,
   },
   choiceButton: {
     marginBottom: 8,
+    borderWidth: 1,
+    borderColor: colors.primary,
     paddingVertical: 10,
     paddingHorizontal: 16,
     borderRadius: 8,
-    backgroundColor: colors.universalBg,
+    backgroundColor: 'transparent',
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   choiceText: {
-    color: colors.white,
+    color: 'black',
     fontSize: 16,
   },
   checkIcon: {
-    color: colors.white,
+    // color: 'white',
     fontSize: 16,
   },
   fab: {

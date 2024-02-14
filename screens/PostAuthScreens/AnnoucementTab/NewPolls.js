@@ -6,7 +6,6 @@ import { collection, addDoc } from 'firebase/firestore';
 import colors from '../../../globalVariables/colors';
 
 const NewPolls = ({ navigation }) => {
-  console.log(navigation)
   const [title, setTitle] = useState('');
   const [choices, setChoices] = useState(['', '']); // Initial choices array with two empty strings
 
@@ -57,6 +56,7 @@ const NewPolls = ({ navigation }) => {
         <Card.Content>
           <TextInput
             style={styles.input}
+            placeholderTextColor={colors.primary}
             placeholder="Poll Title"
             value={title}
             onChangeText={setTitle}
@@ -65,6 +65,7 @@ const NewPolls = ({ navigation }) => {
           {choices.map((choice, index) => (
             <TextInput
               key={index}
+              placeholderTextColor={colors.primary}
               style={styles.input}
               placeholder={`Choice ${index + 1}`}
               value={choice}
@@ -89,14 +90,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
-    backgroundColor: '#fff',
+    backgroundColor: colors.yogiCupBlue,
   },
   card: {
+    backgroundColor: 'transparent',
     padding: 10,
     margin: 10,
     elevation: 3,
   },
   input: {
+    color: 'black',
     borderWidth: 1,
     borderColor: '#ddd',
     padding: 10,

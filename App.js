@@ -22,6 +22,7 @@ import TeamsScreen from './screens/PostAuthScreens/TeamsTab/TeamsScreen';
 import ForgotPassword from './screens/PreAuthScreens/ForgotPassword';
 import FeedScreen from './screens/PostAuthScreens/ReelsTab/FeedScreen';
 import NewPolls from './screens/PostAuthScreens/AnnoucementTab/NewPolls';
+import MyReels from './screens/PostAuthScreens/ReelsTab/MyReels';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -50,10 +51,11 @@ function AnnoucementStack({ navigation }) {
       <Stack.Screen
         name="Announcements"
         options={({ navigation }) => ({
+          headerTintColor: 'white',
           headerShown: true,
           headerTitle: 'Announcements',
           headerStyle: {
-            backgroundColor: '#EFEFEF',
+            backgroundColor: colors.yogiCupBlue,
             borderBottomWidth: 1,
             borderBottomColor: colors.primary
           },
@@ -65,10 +67,11 @@ function AnnoucementStack({ navigation }) {
         name="NewPolls" 
         component={NewPolls} 
         options={{ 
+          headerTintColor: 'white',
           headerBackTitle: "Polls",
           headerTitle: "New Poll",
           headerStyle: {
-            backgroundColor: '#EFEFEF', // Apply the same header style for consistency
+            backgroundColor: colors.yogiCupBlue, // Apply the same header style for consistency
             borderBottomWidth: 1,
             borderBottomColor: colors.primary
           },
@@ -78,12 +81,13 @@ function AnnoucementStack({ navigation }) {
         name="NewAnnouncement" 
         component={NewAnnouncement} 
         options={{ 
+          headerTintColor: 'white',
           headerBackTitle: "Feed",
           headerTitle: "New Announcement",
           headerStyle: {
-            backgroundColor: '#EFEFEF', // Apply the same header style for consistency
+            backgroundColor: colors.yogiCupBlue, // Apply the same header style for consistency
             borderBottomWidth: 1,
-            borderBottomColor: colors.primary
+            borderBottomColor: colors.primary,
           },
         }} 
       />
@@ -91,9 +95,10 @@ function AnnoucementStack({ navigation }) {
         name="Account"
         component={AccountScreen}
         options={{
+          headerTintColor: 'white',
           headerBackTitle: '',
           headerStyle: {
-            backgroundColor: '#EFEFEF',
+            backgroundColor: colors.yogiCupBlue,
             borderBottomWidth: 1,
             borderBottomColor: colors.primary
           }
@@ -103,12 +108,13 @@ function AnnoucementStack({ navigation }) {
         name="Food"
         component={FoodMenuScreen}
         options={{
+          headerTintColor: 'white',
           headerBackTitleVisible: false,
           // headerBackTitle: '.',
           headerShown: true,
           headerTitle: 'Yogi Cup Dining',
           headerStyle: {
-            backgroundColor: '#EFEFEF',
+            backgroundColor: colors.yogiCupBlue,
             borderBottomWidth: 1,
             borderBottomColor: colors.primary
           },
@@ -117,7 +123,6 @@ function AnnoucementStack({ navigation }) {
     </Stack.Navigator>
   )
 }
-
 function ReelsStack({navigation}) {
   return (
     <Stack.Navigator>
@@ -136,18 +141,32 @@ function ReelsStack({navigation}) {
         }} 
       />
       <Stack.Screen
-        name="Feed" 
+        name="My Feed" 
         component={FeedScreen} 
         options={{ 
+          headerTintColor: 'white',
           headerShown: true, // Set this to true to enable the header
-          headerTransparent: true, // Set this to true to make the header transparent
+          headerTransparent: false, // Set this to true to make the header transparent
           tabBarShowLabel: false,
           headerStyle: {
-            backgroundColor: 'rgba(0, 0, 0, 0.2)', // Use rgba for transparency
+            backgroundColor: colors.yogiCupBlue,
             borderBottomWidth: 1,
             borderBottomColor: colors.primary
           },
         }} 
+      />
+      <Stack.Screen
+        name="My Reels"
+        component={MyReels}
+        options={{
+          headerTintColor: 'white',
+          headerBackTitle: 'Feed',
+          headerStyle: {
+            backgroundColor: colors.yogiCupBlue,
+            borderBottomWidth: 1,
+            borderBottomColor: colors.primary
+          }
+        }}
       />
     </Stack.Navigator>
   )
@@ -169,7 +188,7 @@ const MainStack = () => {
           // padding: 10,
           display: 'flex',
           // backgroundColor: '#EFEFEF',
-          // backgroundColor: colors.yogiCupBlue
+          backgroundColor: colors.yogiCupBlue
         },
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
@@ -231,6 +250,7 @@ const MainStack = () => {
         name="Satsang" 
         component={Home} 
         options={{ 
+          headerTintColor: 'white',
           headerShown: true, 
           tabBarShowLabel: false,
           // tabBarIcon: ({ focused, color, size }) => {
@@ -240,7 +260,7 @@ const MainStack = () => {
           //         />;
           // },
           headerStyle: {
-            backgroundColor: '#EFEFEF',
+            backgroundColor: colors.yogiCupBlue, // Apply the same header style for consistency
             borderBottomWidth: 1,
             borderBottomColor: colors.primary
           } 
@@ -286,7 +306,7 @@ const RootNavigator = () => {
       setTimeout(() => {
         setIsLoading(false);
         SplashScreen.hideAsync();
-      }, 3500); // 3 seconds delay
+      }, 2700); // 2.7 second delay
 
       // Smoother bouncing basketball animation
       Animated.sequence([

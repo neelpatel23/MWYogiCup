@@ -159,7 +159,7 @@ const AnnouncementTab = ({ navigation }) => {
           onPress={() => navigation.navigate("Food")}
         />
       )}
-      {isAdmin && index === 0 && (
+      {index === 0 && (
         <FAB
           style={styles.reloadButton}
           icon="reload"
@@ -175,7 +175,7 @@ const AnnouncementTab = ({ navigation }) => {
           onPress={() => navigation.navigate('NewAnnouncement')}
         />
       )}
-      {isAdmin && index === 4 && ( // Index 0 corresponds to the Announcement tab
+      {isAdmin && index === 4 && ( // Index 4 corresponds to the Polls tab
         <FAB
           color='white'
           style={styles.fab}
@@ -190,7 +190,7 @@ const AnnouncementTab = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: colors.yogiCupBlue,
   },
   reloadButton: {
     position: 'absolute',
@@ -204,6 +204,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   card: {
+    backgroundColor: colors.cardBg,
     marginVertical: 8,
     borderRadius: 8,
     elevation: 3,
@@ -223,7 +224,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   tabBar: {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: colors.yogiCupBlue,
     elevation: 0,
   },
   tabLabel: {
@@ -253,6 +254,7 @@ const styles = StyleSheet.create({
     marginRight: 15,
   },
   loadingContainer: {
+    backgroundColor: colors.yogiCupBlue,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',

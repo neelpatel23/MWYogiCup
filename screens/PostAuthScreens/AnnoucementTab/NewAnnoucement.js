@@ -67,15 +67,19 @@ const NewAnnouncement = ({ navigation }) => {
       <Card style={styles.card}>
         <Card.Content>
           <TextInput
+            autoCorrect={false}
             style={styles.input}
             placeholder="Title"
             value={title}
+            placeholderTextColor={colors.primary}
             onChangeText={setTitle}
           />
           <TextInput
+            autoCorrect={false}
             style={[styles.input, styles.textArea]}
             placeholder="Content"
             value={content}
+            placeholderTextColor={colors.primary}
             onChangeText={setContent}
             multiline
             numberOfLines={4}
@@ -118,20 +122,22 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
-    backgroundColor: '#fff',
+    backgroundColor: colors.yogiCupBlue,
   },
   card: {
+    backgroundColor: colors.yogiCupBlue,
     padding: 10,
     margin: 10,
     elevation: 3,
   },
   input: {
+    color: 'white',
     borderWidth: 1,
     borderColor: '#ddd',
     padding: 10,
     fontSize: 16,
     borderRadius: 6,
-    backgroundColor: '#fff',
+    backgroundColor: 'transparent',
     marginBottom: 15,
   },
   textArea: {
@@ -139,6 +145,7 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
   },
   previousAnnouncementsTitle: {
+    color: 'white',
     fontSize: 18,
     fontWeight: 'bold',
     padding: 10,

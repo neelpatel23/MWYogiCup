@@ -96,11 +96,11 @@ const TournamentBracket = () => {
             key={group}
             style={[
               styles.radioButton,
-              { backgroundColor: group === selectedGroup ? colors.primary : 'white' },
+              { backgroundColor: group === selectedGroup ? colors.primary : 'transparent' },
             ]}
             onPress={() => setSelectedGroup(group)}
           >
-            <Text style={{ color: group === selectedGroup ? 'white' : colors.primary }}>
+            <Text style={{ color: group === selectedGroup ? 'white' : 'white' }}>
               {group}
             </Text>
           </TouchableOpacity>
@@ -110,8 +110,8 @@ const TournamentBracket = () => {
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.contentContainer}
-        horizontal
         showsHorizontalScrollIndicator={false}
+        horizontal
       >
         {tournamentRounds.map((round, index) => (
           <BracketRound key={index} round={round} />
@@ -137,15 +137,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginHorizontal: 20,
     marginBottom: 20,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: 'transparent',
     borderRadius: 10,
     padding: 15,
     elevation: 3,
   },
   winningTeam: {
-    color: 'green', // Change to the color you want for the winning team
+    color: 'lightgreen', // Change to the color you want for the winning team
   },
   winningScore: {
+    fontSize: 20,
     fontWeight: 'bold',
     // Add any additional styles for the winning score
   },
@@ -158,7 +159,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
     fontSize: 18,
-    color: '#333333',
+    color: 'white',
   },
   gameContainer: {
     flexDirection: 'row',
@@ -167,9 +168,9 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     padding: 15,
     borderWidth: 1,
-    borderColor: '#999999',
+    borderColor: colors.primary,
     borderRadius: 10,
-    backgroundColor: '#ffffff',
+    backgroundColor: 'transparent',
     // width: "100%", // Adjust the width as needed
   },
   teamContainer: {
@@ -179,21 +180,25 @@ const styles = StyleSheet.create({
   scoreContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between', // Adjust spacing between team scores and vs text
+    flex: 1, // Add flex: 1 to make the score container take up remaining space
   },
+  
   teamText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333333',
+    color: 'white',
   },
   scoreText: {
     marginHorizontal: 5,
     fontSize: 16,
-    color: '#555555',
+    color: colors.primary,
   },
   vsText: {
     marginHorizontal: 10,
     fontSize: 16,
     color: '#888888',
+    alignSelf: 'center', // Add this line to center the text vertically
   },
   // Styles for radio buttons
   radioContainer: {

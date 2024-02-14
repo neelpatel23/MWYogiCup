@@ -7,7 +7,6 @@ import TournamentBracket from './BracketScreen';
 import Standings from './Standings';
 import colors from '../../../globalVariables/colors';
 import RegularSeason from './RegularSeason';
-import AllStarVoting from './AllStar';
 import YourSchedule from './YourSchedule';
 
 
@@ -38,7 +37,7 @@ const TeamsScreen = () => {
           onIndexChange={setIndex}
           initialLayout={{ width: '100%' }}
           renderTabBar={props => (
-            <TabBar 
+            <TabBar
               {...props} 
               style={styles.tabBar} 
               labelStyle={styles.tabLabel} 
@@ -54,7 +53,8 @@ const TeamsScreen = () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: colors.universalBg,
+    // backgroundColor: colors.universalBg,
+    backgroundColor: colors.yogiCupBlue
   },
   container: {
     flex: 1,
@@ -77,10 +77,10 @@ const styles = StyleSheet.create({
     margin: 16,
     right: 0,
     bottom: 0,
-    backgroundColor: colors.universalBg,
+    backgroundColor: colors.yogiCupBlue,
   },
   tabBar: {
-    backgroundColor: colors.universalBg,
+    backgroundColor: colors.yogiCupBlue,
     // Add other styles for the tab bar here if needed
     
   },
@@ -88,8 +88,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignContent: 'center',
     textAlign: 'center',
-    color: 'black', // Change the text color
-    fontSize: 14, // Optional: Change the font size if needed
+    color: 'white', // Change the text color to white
+    fontSize: 14,
     fontWeight: '500',
     textTransform: 'none'
   },

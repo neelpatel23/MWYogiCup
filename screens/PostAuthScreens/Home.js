@@ -1,27 +1,17 @@
-import React, { useRef, useEffect } from 'react';
-import { Animated, StyleSheet, View, TouchableOpacity, Text } from 'react-native';
+import React from 'react';
+import { StyleSheet, View, ImageBackground, Text } from 'react-native';
+const header = require("../../assets/welcome.gif")
 
 export default function Home() {
-  const animatedValue = useRef(new Animated.Value(0)).current;
-
-  useEffect(() => {
-    Animated.timing(animatedValue, {
-      toValue: 1,
-      duration: 1000,
-      useNativeDriver: true,
-    }).start();
-  }, []);
-
-  const translateY = animatedValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: [-100, 0],
-  });
-
   return (
     <View style={styles.container}>
-      <Animated.View style={[styles.box, { transform: [{ translateY }] }]}>
-        <Text style={styles.text}>Hello, Animated World!</Text>
-      </Animated.View>
+      <ImageBackground 
+        source={header}
+        style={styles.imageBackground}>
+        <View style={styles.content}>
+          <Text style={styles.text}>Hello, Animated Gradient!</Text>
+        </View>
+      </ImageBackground>
     </View>
   );
 }
@@ -29,16 +19,17 @@ export default function Home() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
-  box: {
-    width: 200,
-    height: 200,
-    backgroundColor: 'skyblue',
-    alignItems: 'center',
+  imageBackground: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
     justifyContent: 'center',
+    alignItems: 'center',
+  },
+  content: {
+    alignItems: 'center',
   },
   text: {
     fontSize: 20,

@@ -28,10 +28,10 @@ const ContactCard = ({ contact }) => {
       <Card.Content>
         <View style={styles.cardHeader}>
           <Image source={{ uri: contact.image }} style={styles.image} />
-          <Title>{contact.name}</Title>
+          <Title style={{ color: 'black', fontWeight: 'bold'}}>{contact.name}</Title>
         </View>
-        <Paragraph>{contact.phone}</Paragraph>
-        <Paragraph>{contact.email}</Paragraph>
+        <Paragraph style={{ color: 'black'}}>{contact.phone}</Paragraph>
+        <Paragraph style={{ color: 'black'}}>{contact.email}</Paragraph>
       </Card.Content>
       <Card.Actions>
         <Button 
@@ -105,12 +105,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
-    backgroundColor: colors.universalBg
+    backgroundColor: colors.yogiCupBlue
   },
   card: {
+    borderWidth: 1,
+    // borderColor: colors.primary,
     marginVertical: 8,
     // elevation: 4,
-    backgroundColor: colors.universalBg
+    backgroundColor: colors.cardBg
   },
   cardHeader: {
     flexDirection: 'row',

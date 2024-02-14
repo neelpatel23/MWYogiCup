@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { ScrollView, StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { Card, Paragraph } from 'react-native-paper';
+import { Card, Paragraph, Title } from 'react-native-paper';
 import colors from '../../../globalVariables/colors';
 import { collection, getDocs } from 'firebase/firestore';
 import { database } from '../../../config/firebase';
 
 const InformationScreen = () => {
-  const [selectedDay, setSelectedDay] = useState('');
+  const [selectedDay, setSelectedDay] = useState('Day 1');
   const [scheduleData, setScheduleData] = useState([]);
 
   useEffect(() => {
@@ -18,9 +18,6 @@ const InformationScreen = () => {
       querySnapshot.forEach((doc) => {
         scheduleData.push({ id: doc.id, ...doc.data() });
       });
-
-      console.log('Fetched schedule data:', scheduleData); // Log the fetched data
-
       setScheduleData(scheduleData);
     };
 
@@ -39,11 +36,11 @@ const InformationScreen = () => {
             key={index}
             style={[
               styles.radioButton,
-              { backgroundColor: day.id === selectedDay ? colors.primary : 'white' },
+              { backgroundColor: day.id === selectedDay ? colors.primary : 'transparent' },
             ]}
             onPress={() => handleDaySelection(day.id)}
           >
-            <Text style={{ color: day.id === selectedDay ? 'white' : colors.primary }}>
+            <Text style={{ color: day.id === selectedDay ? 'white' : 'white' }}>
               {day.id}
             </Text>
           </TouchableOpacity>
@@ -59,9 +56,9 @@ const InformationScreen = () => {
               ?.events.map((event, index) => (
                 <Card key={index} style={styles.card}>
                   <Card.Content>
-                    <Paragraph>Description: {event.title}</Paragraph>
-                    <Paragraph>Description: {event.description}</Paragraph>
-                    <Paragraph>Time: {event.time}</Paragraph>
+                    <Title style={{ color: 'black', fontWeight: 'bold'}}>{event.title}</Title>
+                    <Paragraph style={{ color: 'black'}}>Location: {event.description}</Paragraph>
+                    <Paragraph style={{ color: 'black'}}>Time: {event.time}</Paragraph>
                   </Card.Content>
                 </Card>
               ))}
@@ -75,7 +72,7 @@ const InformationScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: colors.yogiCupBlue,
     paddingHorizontal: 16,
     paddingVertical: 8,
   },
@@ -118,7 +115,12 @@ const styles = StyleSheet.create({
   },
   card: {
     marginVertical: 8,
-    elevation: 4,
+    borderRadius: 8,
+    elevation: 3,
+    color: 'white',
+    borderWidth: 1,
+    // borderColor: colors.primary,
+    backgroundColor: colors.cardBg
   },
 });
 

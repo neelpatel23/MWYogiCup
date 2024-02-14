@@ -4,15 +4,18 @@ import { Camera } from 'expo-camera';
 import * as ImageManipulator from 'expo-image-manipulator';
 import * as ImagePicker from 'expo-image-picker';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { storage, auth } from '../../../config/firebase';
+import { storage, auth, database } from '../../../config/firebase';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { Button } from 'react-native-paper';
+import { doc, getDoc, collection, setDoc } from 'firebase/firestore'; // Import Firestore functions
 import colors from '../../../globalVariables/colors';
+const yogiCupLogo = require("../../../assets/logo1.png");
 
-const ReelsScreen = () => {
+const ReelsScreen = ({navigation}) => {
   const cameraRef = useRef(null);
+  const user = auth.currentUser;
   const [hasPermission, setHasPermission] = useState(null);
   const [galleryPermission, setGalleryPermission] = useState(null);
+  const [userData, setUserData] = useState({});
   const [isUploading, setIsUploading] = useState(false);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [photoUri, setPhotoUri] = useState(null);
@@ -21,10 +24,27 @@ const ReelsScreen = () => {
     (async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
       setHasPermission(status === 'granted');
-      const { gallery } = ImagePicker.requestMediaLibraryPermissionsAsync(true);
-      setGalleryPermission(status === 'granted');
+      const { gallery } = await ImagePicker.requestMediaLibraryPermissionsAsync(true);
+      setGalleryPermission(gallery === 'granted');
     })();
   }, []);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const userDocRef = doc(database, 'userDATA', user.uid);
+        const docSnap = await getDoc(userDocRef);
+
+        if (docSnap.exists()) {
+          setUserData(docSnap.data());
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, [user.uid]);
 
   const flipCamera = () => {
     setType(
@@ -38,7 +58,11 @@ const ReelsScreen = () => {
     if (cameraRef.current) {
       try {
         const photo = await cameraRef.current.takePictureAsync();
-        compressAndSetImage(photo.uri);
+        if (photo) {
+          compressAndSetImage(photo.uri);
+        } else {
+          throw new Error('Failed to capture a picture.');
+        }
       } catch (error) {
         console.error("Take Picture Error: ", error);
         Alert.alert("Error", "Failed to take a picture.");
@@ -77,31 +101,49 @@ const ReelsScreen = () => {
       Alert.alert("Error", "Failed to compress the image.");
     }
   };
-
+  
   const uploadImage = async () => {
-    if (!photoUri) return;
+    if (!photoUri) {
+      Alert.alert("Error", "No photo to upload.");
+      return;
+    }
+  
     setIsUploading(true);
+  
     try {
-      const userDisplayName = auth.currentUser?.displayName || 'anonymous';
+      const userDisplayName = user?.displayName || 'anonymous';
       const fileName = `${Date.now()}.jpg`;
-      const fileRef = storageRef(storage, `reels/${userDisplayName}/${fileName}`);
-      const blob = await (await fetch(photoUri)).blob();
+      const storagePath = `reels/${userDisplayName}/${fileName}`;
+      const fileRef = storageRef(storage, storagePath);
+      let blob;
+  
+      if (photoUri.startsWith('file://')) {
+        const localFilePath = photoUri.substr(7);
+        const compressedImage = await ImageManipulator.manipulateAsync(
+          localFilePath,
+          [],
+          { compress: 0.7, format: ImageManipulator.SaveFormat.JPEG }
+        );
+        blob = await (await fetch(compressedImage.uri)).blob();
+      } else {
+        blob = await (await fetch(photoUri)).blob();
+      }
   
       const metadata = {
         contentType: 'image/jpeg',
         customMetadata: {
-          'uploader': userDisplayName
+          'uploader': userDisplayName,
+          'center': userData.center,
+          'group': userData.group,
+          'createdAt': new Date().toISOString()
         },
       };
   
-      // Upload the image
       await uploadBytes(fileRef, blob, metadata);
-  
-      // Get the public URL of the uploaded image
       const downloadURL = await getDownloadURL(fileRef);
-  
-      // Now you can use this downloadURL to display the image or store it for later use
-      console.log("Download URL:", downloadURL);
+      const reelsRef = collection(database, 'reels');
+      const docRef = doc(reelsRef, fileName);
+      await setDoc(docRef, { url: downloadURL, metadata });
   
       Alert.alert("Success", "Photo uploaded successfully!");
     } catch (error) {
@@ -116,6 +158,15 @@ const ReelsScreen = () => {
 
   const renderCameraView = () => (
     <>
+      <SafeAreaView style={styles.iconContainer}>
+        <View style={styles.logoContainer}>
+          <Image source={yogiCupLogo} style={{ width: 50, height: 50}} />
+          <Text style={{ color: 'white', marginLeft: 20, fontSize: 25, fontWeight: 200}}>Reels</Text>
+        </View>
+        <TouchableOpacity onPress={() => navigation.navigate("My Feed")}>
+          <Icon name="people-outline" size={30} color="white" />
+        </TouchableOpacity>
+      </SafeAreaView>
       <Camera ref={cameraRef} type={type} style={styles.preview} />
       <View style={styles.snapButtonContainer}>
         <TouchableOpacity onPress={takePicture} style={styles.capture}>
@@ -177,7 +228,26 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)', // Adjust the alpha value (0.5 in this case)
   },
-  
+  iconContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    marginRight: 30,
+    zIndex: 1,
+  },
+  logoContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    position: 'relative',
+    top: 0,
+    right: 0,
+    marginLeft: 30,
+  },
   preview: {
     backgroundColor: colors.primary,
     ...StyleSheet.hairlineWidth, // Make the camera preview full-screen
@@ -199,14 +269,6 @@ const styles = StyleSheet.create({
     top: 0,
     bottom: 0,
     justifyContent: 'center',
-    alignItems: 'center',
-    // backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  instructionsContainer: {
-    position: 'absolute',
-    bottom: 95,
-    left: 0,
-    right: 0,
     alignItems: 'center',
   },
   snapButtonContainer: {

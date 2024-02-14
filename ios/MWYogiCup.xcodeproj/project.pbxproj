@@ -608,7 +608,7 @@
 				);
 				INFOPLIST_FILE = MWYogiCup/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "MW Yogi Cup";
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.sports";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -643,7 +643,7 @@
 				DEVELOPMENT_TEAM = C5N9N785MR;
 				INFOPLIST_FILE = MWYogiCup/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "MW Yogi Cup";
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.sports";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

@@ -29,8 +29,8 @@ const openMaps = (lat, lng) => {
 const LocationCard = ({ location }) => (
   <Card style={styles.card}>
     <Card.Content>
-      <Title>{location.name}</Title>
-      <Paragraph>{location.description}</Paragraph>
+      <Title style={{ color: 'black', fontWeight: 'bold'}}>{location.name}</Title>
+      <Paragraph style={{ color: 'black'}}>{location.description}</Paragraph>
     </Card.Content>
     <Card.Actions style={styles.cardActions}>
       <TouchableOpacity
@@ -95,9 +95,12 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5'
+    backgroundColor: colors.yogiCupBlue
   },
   card: {
+    borderWidth: 1,
+    // borderColor: colors.primary,
+    backgroundColor: colors.cardBg,
     margin: 10,
     elevation: 4,
   },

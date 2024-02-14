@@ -71,10 +71,11 @@ const YourSchedule = () => {
         {filteredGames.map((game, index) => (
           <Card key={index} style={styles.card}>
             <Card.Content>
-              <Text>{game.team1} vs {game.team2}</Text>
-              <Title>{game.opponent}</Title>
-              <Paragraph>Date: {game.date}</Paragraph>
-              <Paragraph>Time: {game.time}</Paragraph>
+              <Title style={{ color: 'black'}}>{game.team1} vs {game.team2}</Title>
+              {/* <Title style={{ color: 'white'}}>{game.opponent}</Title> */}
+              <Paragraph style={{ color: 'black'}}>Date: {game.date}</Paragraph>
+              <Paragraph style={{ color: 'black'}}>Time: {game.time}</Paragraph>
+              <Paragraph style={{ color: 'black'}}>Court: {game.court}</Paragraph>
             </Card.Content>
           </Card>
         ))}
@@ -87,7 +88,7 @@ const YourSchedule = () => {
       {userData && (
         <>
           <Text style={styles.title}>{userData.firstName} - {userData.group}</Text>
-          <Text style={styles.subtitle}>{userData.center} - {userData.team}</Text>
+          <Text style={styles.subtitle}>{userData.center} - {userData.team || 'N/A'}</Text>
           {renderSchedule()}
         </>
       )}
@@ -101,11 +102,14 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   title: {
+    // fontFamily: 'Benton Sans Ultra Condensed Bold',
+    color: colors.primary,
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 16,
   },
   subtitle: {
+    color: colors.primary,
     fontSize: 18,
     fontWeight: '500',
     marginBottom: 10
@@ -114,6 +118,10 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     borderRadius: 8,
     elevation: 3,
+    color: 'white',
+    borderWidth: 1,
+    // borderColor: colors.primary,
+    backgroundColor: colors.cardBg
   },
   noGamesContainer: {
     flex: 1,

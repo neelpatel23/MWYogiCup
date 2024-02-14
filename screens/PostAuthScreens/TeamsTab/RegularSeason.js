@@ -1,30 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import { Card, Paragraph, Title } from 'react-native-paper';
 import colors from '../../../globalVariables/colors';
 import { collection, getDocs } from 'firebase/firestore';
 import { database } from '../../../config/firebase';
 
 const RegularSeason = () => {
-  const [selectedAgeGroup, setSelectedAgeGroup] = useState('');
+  const [selectedAgeGroup, setSelectedAgeGroup] = useState('K1');
   const [selectedTeam, setSelectedTeam] = useState('');
   const [teamNames, setTeamNames] = useState([]);
   const [schedules, setSchedules] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch team names
+        setIsLoading(true);
         const teamNamesSnapshot = await getDocs(collection(database, 'teamNamesDATA'));
         const fetchedTeamNames = teamNamesSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
         setTeamNames(fetchedTeamNames);
 
-        // Fetch schedules
         const schedulesSnapshot = await getDocs(collection(database, 'regularSeasonDATA'));
         const fetchedSchedules = schedulesSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
         setSchedules(fetchedSchedules);
       } catch (error) {
         console.error('Error fetching data:', error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -32,22 +34,22 @@ const RegularSeason = () => {
   }, []);
 
   const renderTeamNames = () => {
-    if (!selectedAgeGroup) return null; // Don't render team names if no age group is selected
+    if (!selectedAgeGroup) return null;
 
     const selectedTeamNames = teamNames.find(team => team.id === selectedAgeGroup)?.teams || [];
 
     return (
-      <ScrollView horizontal={true} style={styles.teamNamesContainer}>
+      <ScrollView horizontal={true} style={styles.teamNamesContainer} contentContainerStyle={styles.teamNamesContent}>
         {selectedTeamNames.map((teamName, index) => (
           <TouchableOpacity
             key={index}
             style={[
               styles.radioButton,
-              { backgroundColor: teamName === selectedTeam ? colors.primary : 'white' },
+              { backgroundColor: teamName === selectedTeam ? colors.primary : 'transparent' },
             ]}
             onPress={() => handleTeamSelect(teamName)}
           >
-            <Text style={{ color: teamName === selectedTeam ? 'white' : colors.primary }}>
+            <Text style={{ color: teamName === selectedTeam ? 'white' : 'white' }}>
               {teamName}
             </Text>
           </TouchableOpacity>
@@ -57,11 +59,10 @@ const RegularSeason = () => {
   };
 
   const renderSchedule = () => {
-  
     if (!selectedAgeGroup || !schedules.find(schedule => schedule.id === selectedAgeGroup)) {
       return (
-        <View style={{ justifyContent: 'center', alignContent: 'center', alignItems: 'center'}}>
-          <Text>Select an age group to see their Schedule</Text>
+        <View style={styles.noScheduleContainer}>
+          <Text style={{ color: 'white'}}>Select an age group to see their Schedule</Text>
         </View>
       );
     }
@@ -70,23 +71,32 @@ const RegularSeason = () => {
     const filteredSchedules = selectedTeam
       ? selectedSchedule.games.filter(game => game.team1 === selectedTeam || game.team2 === selectedTeam)
       : selectedSchedule.games;
-
+  
+    if (filteredSchedules.length === 0) {
+      return (
+        <View style={styles.noScheduleContainer}>
+          <Text style={{ color: 'white'}}>No games found for selected team.</Text>
+        </View>
+      );
+    }
   
     return (
       <ScrollView>
         {filteredSchedules.map((game, index) => (
           <Card key={index} style={styles.card}>
             <Card.Content>
-              <Text>{game.team1} vs {game.team2}</Text>
-              <Title>{game.opponent}</Title>
-              <Paragraph>Date: {game.date}</Paragraph>
-              <Paragraph>Time: {game.time}</Paragraph>
+              <Title style={{ color: 'black'}}>{game.team1} vs {game.team2}</Title>
+              {/* <Title style={{ color: 'white'}}>{game.opponent}</Title> */}
+              <Paragraph style={{ color: 'black'}}>Date: {game.date}</Paragraph>
+              <Paragraph style={{ color: 'black'}}>Time: {game.time}</Paragraph>
+              <Paragraph style={{ color: 'black'}}>Court: {game.court}</Paragraph>
             </Card.Content>
           </Card>
         ))}
       </ScrollView>
     );
-  };  
+  };
+  
 
   const handleTeamSelect = (teamName) => {
     setSelectedTeam(prevState => prevState === teamName ? '' : teamName);
@@ -100,19 +110,26 @@ const RegularSeason = () => {
             key={team.id}
             style={[
               styles.radioButton,
-              { backgroundColor: team.id === selectedAgeGroup ? colors.primary : 'white' },
+              { backgroundColor: team.id === selectedAgeGroup ? colors.primary : 'transparent' },
             ]}
             onPress={() => setSelectedAgeGroup(prevState => prevState === team.id ? '' : team.id)}
           >
-            <Text style={{ color: team.id === selectedAgeGroup ? 'white' : colors.primary }}>
+            <Text style={{ color: team.id === selectedAgeGroup ? 'white' : 'white' }}>
               {team.id}
             </Text>
           </TouchableOpacity>
         ))}
       </View>
       {renderTeamNames()}
-
-      <View style={styles.scheduleContainer}>{renderSchedule()}</View>
+      <View style={styles.scheduleContainer}>
+        {isLoading ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color={colors.primary} />
+          </View>
+        ) : (
+          renderSchedule()
+        )}
+      </View>
     </View>
   );
 };
@@ -123,29 +140,31 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   radioButton: {
+    color: 'white',
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    width: 'auto',
-    paddingVertical: 6, // Adjust the padding vertically
-    paddingHorizontal: 12, // Adjust the padding horizontally
+    paddingVertical: 6,
+    paddingHorizontal: 12,
     marginHorizontal: 4,
-    marginVertical: 4, // Add margin vertically between age groups
+    marginVertical: 4,
     borderWidth: 1,
-    marginBottom: 5,
     borderColor: colors.primary,
     borderRadius: 8,
   },
   teamNamesContainer: {
     maxHeight: 40,
     flexDirection: 'row',
-    overflow: 'hidden',
     marginBottom: 16,
   },
+  teamNamesContent: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   ageGroupContainer: {
-    width: '100%', // Take full width of the screen
+    width: '100%',
     flexDirection: 'row',
-    justifyContent: 'center', // Center the age groups horizontally
+    justifyContent: 'center',
   },
   scheduleContainer: {
     flex: 1,
@@ -155,6 +174,21 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     borderRadius: 8,
     elevation: 3,
+    color: 'white',
+    borderWidth: 1,
+    // borderColor: colors.primary,
+    backgroundColor: colors.cardBg
+  },
+  noScheduleContainer: {
+    marginTop: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    color: 'white'
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

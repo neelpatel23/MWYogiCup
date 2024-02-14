@@ -5,7 +5,6 @@ import { signOut, deleteUser } from 'firebase/auth';
 import { auth, database } from '../../../config/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import colors from '../../../globalVariables/colors';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const AccountScreen = ({ navigation }) => {
   const user = auth.currentUser;
@@ -53,8 +52,8 @@ const AccountScreen = ({ navigation }) => {
     <Card style={styles.cube}>
       <Card.Content>
         <View>
-          <Title>{title}</Title>
-          <Paragraph>{detail}</Paragraph>
+          <Title style={{ color: 'white'}}>{title}</Title>
+          <Paragraph style={{ color: colors.primary}}>{detail}</Paragraph>
         </View>
       </Card.Content>
     </Card>
@@ -72,21 +71,14 @@ const AccountScreen = ({ navigation }) => {
       <View style={styles.cubeContainer}>
         <UserInfoCube title="Full Name" detail={`${userData.firstName || ''} ${userData.middleName ? userData.middleName + ' ' : ''}${userData.lastName || ''}`} />
         <UserInfoCube title="Email" detail={userData.email || 'Not available'} />
-        {/* Add other user info fields here */}
-        <UserInfoCube title="DOB" detail={userData.dob || 'Not available'} />
-        {/* <UserInfoCube title="Gender" detail={userData.gender || 'Not available'} />
-        <UserInfoCube title="Mandal" detail={userData.mandal || 'Not available'} /> */}
         <UserInfoCube title="Center" detail={userData.center || 'Not available'} />
-        <UserInfoCube title="Phone" detail={userData.phone || 'Not available'} />
-        {/* <UserInfoCube title="Permission Group" detail={userData.permissionGroup || 'Not available'} />
-        <UserInfoCube title="Primary Wing" detail={userData.primaryWing || 'Not available'} /> */}
         <UserInfoCube title="Group" detail={userData.group || 'Not available'} />
-        <UserInfoCube title="Emergency Contact Name" detail={userData.emeContactName || 'Not available'} />
-        <UserInfoCube title="Emergency Contact Phone" detail={userData.emeContactPhone || 'Not available'} />
         <UserInfoCube title="User Role" detail={userData.userRole || 'Not available'} />
         <UserInfoCube title="Admin Display Name" detail={userData.adminDisplayName || 'Not available'} />
+        <UserInfoCube title="T-Shirt Size" detail={userData.tShirtSize || 'Not available'} />
         <UserInfoCube title="Team" detail={userData.team || 'Not available'} />
         <UserInfoCube title="Hotel" detail={userData.hotel || 'Not available'} />
+        <UserInfoCube title="Room #" detail={userData.room || 'Not available'} />
       </View>
       <View style={styles.buttonContainer}>
         <Button mode="contained" onPress={handleSignOut} style={styles.button}>Sign Out</Button>
@@ -99,7 +91,7 @@ const AccountScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: colors.universalBg,
+      backgroundColor: colors.yogiCupBlue,
     },
     cubeContainer: {
       flexDirection: "row",
@@ -110,8 +102,9 @@ const styles = StyleSheet.create({
     cube: {
         width: '47.3%', // Adjust the width as needed
         margin: 5,
+        // borderColor: colors.primary,
         borderRadius: 8,
-        backgroundColor: colors.universalBg, // Set a white or any light color for the cube's background
+        backgroundColor: colors.yogiCupBlue, // Set a white or any light color for the cube's background
         // Override shadow and elevation for a flat look
         shadowOpacity: 0, // Remove shadow for iOS
         elevation: 0, // Remove elevation for Android
@@ -136,6 +129,7 @@ const styles = StyleSheet.create({
       width: '40%',
     },
     loadingContainer: {
+      backgroundColor: colors.yogiCupBlue,
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',

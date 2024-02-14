@@ -2,6 +2,7 @@ export default {
     primary: '#F2682A',
     yogiCupBlue: '#193768',
     mediumGray: '#F6F7FB',
+    cardBg: "#C5C5C5",
     lightGray: '#FAFAFA',
     accent: '#f57c00',
     universalBg: '#EFEFEF',

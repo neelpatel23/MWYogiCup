@@ -78,16 +78,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#F5F5F5'
+    backgroundColor: colors.yogiCupBlue
   },
   dayTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 10
+    marginBottom: 10,
+    color: 'white'
   },
   card: {
     width: '100%',
-    backgroundColor: 'white',
+    backgroundColor: colors.cardBg,
     padding: 16,
     borderRadius: 8,
     marginBottom: 16
@@ -103,6 +104,7 @@ const styles = StyleSheet.create({
     color: '#555'
   },
   loadingContainer: {
+    backgroundColor: colors.yogiCupBlue,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
