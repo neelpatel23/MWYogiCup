@@ -186,10 +186,10 @@ const ReelsScreen = ({navigation}) => {
     <View style={styles.preview}>
       <Image source={{ uri: photoUri }} style={styles.previewImage} />
       <TouchableOpacity onPress={() => setPhotoUri(null)} style={styles.cancelButton}>
-        <Text style={styles.cancelButtonText}>Retake</Text>
+        <Icon name='reload-outline' size={25} color="white"/>
       </TouchableOpacity>
       <TouchableOpacity onPress={uploadImage} style={styles.uploadButton}>
-        <Text style={styles.uploadButtonText}>Upload</Text>
+        <Icon name='paper-plane-outline' size={25} color="white"/>
       </TouchableOpacity>
     </View>
   );
@@ -269,6 +269,7 @@ const styles = StyleSheet.create({
     top: 0,
     bottom: 0,
     justifyContent: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
     alignItems: 'center',
   },
   snapButtonContainer: {
@@ -280,7 +281,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   uploadingText: {
-    color: 'black',
+    color: 'white',
     fontSize: 16,
     marginBottom: 10,
   },
@@ -314,7 +315,7 @@ const styles = StyleSheet.create({
     bottom: 20,
     left: 20,
     backgroundColor: 'red',
-    padding: 10,
+    padding: 15,
     borderRadius: 10,
   },
   cancelButtonText: {
@@ -326,7 +327,7 @@ const styles = StyleSheet.create({
     bottom: 20,
     right: 20,
     backgroundColor: colors.primary,
-    padding: 10,
+    padding: 15,
     borderRadius: 10,
   },
   uploadButtonText: {

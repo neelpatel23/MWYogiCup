@@ -138,7 +138,10 @@ const Polls = () => {
         ) : polls.length === 0 ? (
           <TouchableOpacity>
             <Text style={styles.noContentText}>
-              No polls exist. Check back later.
+              No polls exist. Check back later
+            </Text>
+            <Text style={styles.noContentText}>
+              You will only be able to vote once for each poll
             </Text>
           </TouchableOpacity>
         ) : (

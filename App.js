@@ -251,6 +251,7 @@ const MainStack = () => {
         component={Home} 
         options={{ 
           headerTintColor: 'white',
+          headerTitle: 'MW Yogi Cup 2024',
           headerShown: true, 
           tabBarShowLabel: false,
           // tabBarIcon: ({ focused, color, size }) => {
