@@ -3,7 +3,7 @@
     "name": "MW Yogi Cup",
     "slug": "MWYogiCup",
     "icon": "./assets/logo1.png",
-    "version": "6.0.0",
+    "version": "7.0.0",
     "assetBundlePatterns": [
       "**/*"
     ],
