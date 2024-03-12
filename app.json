@@ -3,7 +3,7 @@
     "name": "MW Yogi Cup",
     "slug": "MWYogiCup",
     "icon": "./assets/logo1.png",
-    "version": "2.0.0",
+    "version": "6.0.0",
     "assetBundlePatterns": [
       "**/*"
     ],
@@ -16,7 +16,7 @@
       "package": "com.neelpatel.mwyogicup"
     },
     "ios": {
-      "bundleIdentifier": "com.neelpatel.mwyogicup"
+      "bundleIdentifier": "com.neelpatel.mwyc"
     },
     "extra": {
       "eas": {

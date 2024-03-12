@@ -85,7 +85,7 @@ const RegularSeason = () => {
         {filteredSchedules.map((game, index) => (
           <Card key={index} style={styles.card}>
             <Card.Content>
-              <Title style={{ color: 'black'}}>{game.team1} vs {game.team2}</Title>
+              <Title style={{ color: 'black', fontSize: 18}}>{game.team1} <Title style={{ color: colors.primary, fontSize: 15, marginHorizontal: 5}}>vs</Title> {game.team2}</Title>
               {/* <Title style={{ color: 'white'}}>{game.opponent}</Title> */}
               <Paragraph style={{ color: 'black'}}>Date: {game.date}</Paragraph>
               <Paragraph style={{ color: 'black'}}>Time: {game.time}</Paragraph>
@@ -137,7 +137,7 @@ const RegularSeason = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    padding: 10
   },
   radioButton: {
     color: 'white',
@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
   teamNamesContainer: {
     maxHeight: 40,
     flexDirection: 'row',
-    marginBottom: 16,
+    marginBottom: 5,
   },
   teamNamesContent: {
     alignItems: 'center',
@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
   },
   scheduleContainer: {
     flex: 1,
-    marginBottom: 16,
+    // marginBottom: 16,
   },
   card: {
     marginVertical: 8,

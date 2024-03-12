@@ -21,50 +21,20 @@ function generatePassword(length = 10) {
 const users = 
 [
   {
-    "IdentNumber": 4210,
-    "firstName": "Manan",
-    "middleName": "Devendra",
+    "IdentNumber": 4867,
+    "firstName": "Neel",
+    "middleName": "Jagesh",
     "lastName": "Patel",
-    "email": "mananrocks25@gmail.com",
-    "tShirtSize": "Adult small",
-    "center": "Detroit",
-    "group": "Yuvak",
-    "team": "Team 17",
+    "email": "neelp2023@gmail.com",
+    "tShirtSize": "Adult Medium",
+    "center": "Munster",
+    "group": "K2",
+    "team": "Team 3",
     "hotel": "Hampton Inn",
-    "room": 229,
-    "userRole": "",
+    "room": 209,
+    "userRole": "Admin",
     "adminDisplayName": ""
   },
-  {
-    "IdentNumber": 10120,
-    "firstName": "Parth",
-    "middleName": "Divyesh",
-    "lastName": "Bhakta",
-    "email": "parth1bhakta@gmail.com",
-    "tShirtSize": "Adult medium",
-    "center": "Minneapolis",
-    "group": "Yuvak",
-    "team": "Team 18",
-    "hotel": "Hampton Inn",
-    "room": 229,
-    "userRole": "",
-    "adminDisplayName": ""
-  },
-  {
-    "IdentNumber": 1952,
-    "firstName": "Darshan",
-    "middleName": "Ritesh",
-    "lastName": "Patel",
-    "email": "darshanpatel7900@gmail.com",
-    "tShirtSize": "Adult medium",
-    "center": "Cleveland",
-    "group": "K1",
-    "team": "Team 19",
-    "hotel": "Hampton Inn",
-    "room": 229,
-    "userRole": "",
-    "adminDisplayName": ""
-  }
 ]
 
 let passwordData = '';

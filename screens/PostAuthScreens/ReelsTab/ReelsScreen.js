@@ -112,6 +112,7 @@ const ReelsScreen = ({navigation}) => {
   
     try {
       const userDisplayName = user?.displayName || 'anonymous';
+      const userUID = user?.uid;
       const fileName = `${Date.now()}.jpg`;
       const storagePath = `reels/${userDisplayName}/${fileName}`;
       const fileRef = storageRef(storage, storagePath);
@@ -132,6 +133,7 @@ const ReelsScreen = ({navigation}) => {
       const metadata = {
         contentType: 'image/jpeg',
         customMetadata: {
+          'userUID': userUID,
           'uploader': userDisplayName,
           'center': userData.center,
           'group': userData.group,

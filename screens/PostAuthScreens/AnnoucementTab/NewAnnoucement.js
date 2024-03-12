@@ -151,6 +151,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   previousAnnouncementCard: {
+    backgroundColor: colors.cardBg,
     margin: 10,
     elevation: 2,
   },

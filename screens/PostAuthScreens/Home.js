@@ -3,15 +3,16 @@ import { StyleSheet, View, Text } from 'react-native';
 import { Video } from 'expo-av';
 import colors from '../../globalVariables/colors';
 
-const header = require("../../assets/satsang.mp4");
+const header = require("../../assets/1.mp4");
 
 export default function Home() {
   return (
     <View style={styles.container}>
       <Video
+        volume={0.0}
         source={header}
         style={styles.video}
-
+        isMuted={true}
         resizeMode='cover'
         shouldPlay
         isLooping

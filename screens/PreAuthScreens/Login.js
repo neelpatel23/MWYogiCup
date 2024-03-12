@@ -19,17 +19,18 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { signInWithEmailAndPassword } from '@firebase/auth';
 import { auth, database } from '../../config/firebase';
 import { doc, getDoc } from 'firebase/firestore';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import colors from '../../globalVariables/colors';
-const logoImage = require('../../assets/logo1.png'); // Replace with the path to your logo image
+const logoImage = require('../../assets/logo1.png'); // Adjust with your logo image path
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState('');
   const [IdentNumber, setIdentNumber] = useState(null);
   const [password, setPassword] = useState('');
+  const [passwordVisibility, setPasswordVisibility] = useState(true);
   const [loading, setLoading] = useState(false);
   const [logoSize, setLogoSize] = useState({ width: 250, height: 250 });
   const [logoPosition, setLogoPosition] = useState({ top: 20 });
-
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -62,7 +63,6 @@ export default function Login({ navigation }) {
     setLoading(true);
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-
       const userDoc = await getDoc(doc(database, "userDATA", userCredential.user.uid));
       if (!userDoc.exists() || userDoc.data().identNumber !== Number(IdentNumber)) {
         await auth.signOut();
@@ -73,6 +73,10 @@ export default function Login({ navigation }) {
     } finally {
       setLoading(false);
     }
+  };
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisibility(!passwordVisibility);
   };
 
   return (
@@ -86,53 +90,58 @@ export default function Login({ navigation }) {
           contentContainerStyle={styles.scrollViewContent}
           keyboardShouldPersistTaps="handled"
         >
-          <Image source={logoImage} style={[styles.logo, { width: logoSize.width, height: logoSize.height }, logoPosition]} />
+          <Image source={logoImage} style={[styles.logo, logoSize, logoPosition]} />
           <TextInput
             style={styles.input}
             placeholder="Enter BKID / Person ID"
-            placeholderTextColor='#000'
+            placeholderTextColor="#000"
             autoCapitalize="none"
             autoCorrect={false}
+            autoFocus={true}
             keyboardType="number-pad"
             textContentType="creditCardNumber"
-            autoFocus={true}
             value={IdentNumber ? IdentNumber.toString() : ''}
             onChangeText={(text) => setIdentNumber(text ? Number(text) : null)}
           />
           <TextInput
             style={styles.input}
             placeholder="Enter email"
-            placeholderTextColor='#000'
+            placeholderTextColor="#000"
             autoCapitalize="none"
             autoCorrect={false}
             keyboardType="email-address"
             textContentType="emailAddress"
-            autoFocus={true}
             value={email}
             onChangeText={(text) => setEmail(text)}
           />
-          <TextInput
-            style={styles.input}
-            placeholder="Enter password"
-            placeholderTextColor='#000'
-            autoCapitalize="none"
-            autoCorrect={false}
-            secureTextEntry={true}
-            textContentType="password"
-            value={password}
-            onChangeText={(text) => setPassword(text)}
-          />
+          <View style={styles.passwordContainer}>
+            <TextInput
+              style={[styles.input, styles.passwordInput]}
+              placeholder="Enter password"
+              placeholderTextColor="#000"
+              autoCapitalize="none"
+              autoCorrect={false}
+              secureTextEntry={passwordVisibility}
+              textContentType="password"
+              value={password}
+              onSubmitEditing={onHandleLogin}
+              onChangeText={(text) => setPassword(text)}
+            />
+            <TouchableOpacity onPress={togglePasswordVisibility} style={styles.visibilityToggle}>
+              <Ionicons name={passwordVisibility ? "eye-off" : "eye"} size={24} color={colors.yogiCupBlue} />
+            </TouchableOpacity>
+          </View>
           {loading ? (
-            <ActivityIndicator size="large" color="#fff" />
+            <ActivityIndicator size="large" color={colors.yogiCupBlue} />
           ) : (
             <TouchableOpacity style={styles.button} onPress={onHandleLogin}>
-              <Text style={styles.buttonText}> Log In</Text>
+              <Text style={styles.buttonText}>Log In</Text>
             </TouchableOpacity>
           )}
-          <View style={{ marginTop: 20, flexDirection: 'row', alignItems: 'center', alignSelf: 'center' }}>
-            <Text style={{ color: 'gray', fontWeight: '600', fontSize: 14 }}>Forgot your password? </Text>
-            <TouchableOpacity onPress={() => navigation.navigate("Forgot password")}>
-              <Text style={{ color: '#f57c00', fontWeight: '600', fontSize: 14 }}>Reset</Text>
+          <View style={styles.forgotPasswordContainer}>
+            <Text style={styles.forgotPasswordText}>Forgot your password? </Text>
+            <TouchableOpacity onPress={() => navigation.navigate("ForgotPassword")}>
+              <Text style={styles.resetText}>Reset</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
@@ -142,11 +151,6 @@ export default function Login({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   container: {
     flex: 1,
     backgroundColor: colors.yogiCupBlue,
@@ -177,6 +181,22 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 20,
   },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '80%',
+  },
+  passwordInput: {
+    flex: 1,
+    // marginRight: 10,
+  },
+  visibilityToggle: {
+    // position: 'relative',
+    position: 'absolute',
+    right: 10,
+    top: '40%',
+    transform: [{ translateY: -12 }],
+  },
   button: {
     backgroundColor: "#f16827",
     width: '70%',
@@ -190,5 +210,21 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  forgotPasswordContainer: {
+    marginTop: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'center',
+  },
+  forgotPasswordText: {
+    color: 'gray',
+    fontWeight: '600',
+    fontSize: 14,
+  },
+  resetText: {
+    color: '#f57c00',
+    fontWeight: '600',
+    fontSize: 14,
   },
 });

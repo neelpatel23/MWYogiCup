@@ -111,7 +111,7 @@ const FeedScreen = ({ navigation }) => {
               {/* <Text>Hey</Text> */}
               <View style={styles.overlay}>
                 <Image source={logo} style={styles.logo} />
-                <Text style={styles.metadata}>{uploaderNames[index]} - {uploaderGroups[index]} - {uploaderCenters[index]} </Text>
+                <Text style={styles.metadata}>{uploaderNames[index] || 'N/A'} - {uploaderGroups[index] || 'N/A'} - {uploaderCenters[index] || 'N/A'} </Text>
               </View>
             </View>
           ))}

@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     textAlign: 'center',
     color: 'white', // Change the text color to white
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '500',
     textTransform: 'none'
   },

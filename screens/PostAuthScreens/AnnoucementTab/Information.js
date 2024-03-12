@@ -6,7 +6,7 @@ import { collection, getDocs } from 'firebase/firestore';
 import { database } from '../../../config/firebase';
 
 const InformationScreen = () => {
-  const [selectedDay, setSelectedDay] = useState('Day 1');
+  const [selectedDay, setSelectedDay] = useState('1. Arrival');
   const [scheduleData, setScheduleData] = useState([]);
 
   useEffect(() => {
@@ -40,7 +40,7 @@ const InformationScreen = () => {
             ]}
             onPress={() => handleDaySelection(day.id)}
           >
-            <Text style={{ color: day.id === selectedDay ? 'white' : 'white' }}>
+            <Text style={{ color: day.id === selectedDay ? 'white' : 'white'}}>
               {day.id}
             </Text>
           </TouchableOpacity>
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
   // radioButton: {
   //   alignItems: 'center',
   //   justifyContent: 'center',
-  //   paddingVertical: 8,
+  //   paddingVertical: 8,r
   //   paddingHorizontal: 16,
   //   margin: 5,
   //   borderWidth: 1,

@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, ActivityIndicator, TouchableOpacity, Dimensions } from 'react-native';
 import { doc, getDoc } from 'firebase/firestore';
 import { database } from '../../../config/firebase';
 import colors from '../../../globalVariables/colors';
+
+const windowWidth = Dimensions.get('window').width;
+
 
 const BracketGame = ({ team1, team2, score1, score2 }) => {
   const isTeam1Winning = score1 > score2;
@@ -10,32 +13,21 @@ const BracketGame = ({ team1, team2, score1, score2 }) => {
 
   return (
     <View style={styles.gameContainer}>
-      <View style={styles.teamContainer}>
-        <Text style={[styles.teamText, isTeam1Winning && styles.winningTeam]}>
-          {team1} 
-        </Text>
+      <View style={[styles.teamScoreContainer, isTeam1Winning && styles.winningTeam]}>
+        <Text style={[styles.teamText]}>{team1 || 'TBD'}</Text>
+        <Text style={[styles.scoreText, isTeam1Winning && styles.winningText]}>{score1}</Text>
       </View>
-      <View style={styles.scoreContainer}>
-        <Text
-          style={[styles.scoreText, isTeam1Winning && styles.winningScore]}
-        >
-          {score1}
-        </Text>
-        <Text style={styles.vsText}>vs</Text>
-        <Text
-          style={[styles.scoreText, isTeam2Winning && styles.winningScore]}
-        >
-          {score2}
-        </Text>
-      </View>
-      <View style={styles.teamContainer}>
-        <Text style={[styles.teamText, isTeam2Winning && styles.winningTeam]}>
-          {team2}
-        </Text>
+
+      <Text style={styles.vsText}>vs</Text>
+
+      <View style={[styles.teamScoreContainer, isTeam2Winning && styles.winningTeam]}>
+        <Text style={[styles.teamText]}>{team2 || 'TBD'}</Text>
+        <Text style={[styles.scoreText, isTeam2Winning && styles.winningText]}>{score2}</Text>
       </View>
     </View>
   );
 };
+
 
 const BracketRound = ({ round }) => (
   <ScrollView showsVerticalScrollIndicator={false}>
@@ -55,6 +47,7 @@ const BracketRound = ({ round }) => (
 );
 
 const TournamentBracket = () => {
+
   const [tournamentRounds, setTournamentRounds] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedGroup, setSelectedGroup] = useState('K1'); // Initial selected group
@@ -121,34 +114,34 @@ const TournamentBracket = () => {
   );
 };
 
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
   },
   scrollView: {
-    maxHeight: '100%',
+    width: windowWidth, // Adjust to the width of the window
   },
   contentContainer: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    justifyContent: 'center',
   },
   roundContainer: {
     alignItems: 'center',
-    marginHorizontal: 20,
     marginBottom: 20,
-    backgroundColor: 'transparent',
-    borderRadius: 10,
     padding: 15,
-    elevation: 3,
   },
   winningTeam: {
-    color: 'lightgreen', // Change to the color you want for the winning team
+    borderRadius: 10,
+    padding: 5,
+  },
+  winningText: {
+    color: 'green',
   },
   winningScore: {
-    fontSize: 20,
     fontWeight: 'bold',
-    // Add any additional styles for the winning score
+    color: colors.winColor, // Define this color in your globalVariables/colors
   },
   loadingContainer: {
     flex: 1,
@@ -164,43 +157,39 @@ const styles = StyleSheet.create({
   gameContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    alignContent: 'center',
+    // justifyContent: 'space-around',
+    justifyContent: 'space-evenly',
     marginVertical: 10,
-    padding: 15,
+    // paddingHorizontal: 10,
+    width: windowWidth - 40, // Subtracting the total padding from windowWidth
     borderWidth: 1,
     borderColor: colors.primary,
     borderRadius: 10,
     backgroundColor: 'transparent',
-    // width: "100%", // Adjust the width as needed
   },
-  teamContainer: {
-    flex: 1,
+  teamScoreContainer: {
+    padding: 5,
+    // justifyContent: 'center',
     alignItems: 'center',
+    maxWidth: (windowWidth / 2) - 40, // Adjusted for padding and vsText width
   },
-  scoreContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between', // Adjust spacing between team scores and vs text
-    flex: 1, // Add flex: 1 to make the score container take up remaining space
-  },
-  
   teamText: {
     fontSize: 16,
     fontWeight: '600',
     color: 'white',
+    textAlign: 'center',
+    marginBottom: 5,
   },
   scoreText: {
-    marginHorizontal: 5,
     fontSize: 16,
     color: colors.primary,
+    fontWeight: 'bold',
   },
   vsText: {
-    marginHorizontal: 10,
     fontSize: 16,
     color: '#888888',
-    alignSelf: 'center', // Add this line to center the text vertically
   },
-  // Styles for radio buttons
   radioContainer: {
     flexDirection: 'row',
     marginBottom: 16,

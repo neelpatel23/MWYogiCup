@@ -41,8 +41,8 @@ const Standings = () => {
     }
   
     const selectedStandings = standings[selectedAgeGroup];
-    const tableData = selectedStandings.map(team => [team.team, team.wins, team.losses, team.points, team.plusMinus]);
-    const tableHead = ['Team', 'W', 'L', 'Points', '+/-'];
+    const tableData = selectedStandings.map(team => [team.team, team.wins, team.losses, team.points]);
+    const tableHead = ['Team', 'W', 'L', 'Points'];
   
     return (
       <ScrollView>
@@ -52,7 +52,7 @@ const Standings = () => {
               data={tableHead}
               style={[styles.row, styles.headRow]} // Apply headRow style to the header row
               textStyle={styles.headText}
-              flexArr={[1.5, 1, 1, 1, 1]} // Set the flex ratios for each column
+              flexArr={[2.5, 1, 1, 1]} // Set the flex ratios for each column
             />
             {tableData.map((rowData, index) => (
               <Row
@@ -60,7 +60,7 @@ const Standings = () => {
                 data={rowData}
                 style={[styles.row, index % 2 === 0 ? styles.evenRow : styles.oddRow]}
                 textStyle={styles.text}
-                flexArr={[1.5, 1, 1, 1, 1]} // Set the flex ratios for each column
+                flexArr={[2.5, 1, 1, 1]} // Set the flex ratios for each column
               />
             ))}
           </Table>

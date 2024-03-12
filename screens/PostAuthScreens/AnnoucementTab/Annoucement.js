@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, Linking } from 'react-native';
 import { Card, Title, Paragraph, FAB } from 'react-native-paper';
 import { auth, database } from '../../../config/firebase';
 import { collection, query, onSnapshot, doc, getDoc, orderBy } from 'firebase/firestore';
@@ -25,6 +25,28 @@ const AnnouncementTab = ({ navigation }) => {
     { key: 'polls', icon: 'bar-chart-outline' }
 
   ]);  
+
+  const isUrl = (str) => {
+    const pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+      '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+      '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+      '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+      '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+      '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+    return !!pattern.test(str);
+  }
+
+  const openUrl = (url) => {
+    if (isUrl(url)) {
+      Linking.canOpenURL(url).then((supported) => {
+        if (supported) {
+          Linking.openURL(url);
+        } else {
+          console.log("Don't know how to open URI: " + url);
+        }
+      });
+    }
+  };
 
   const fetchAnnouncements = async () => {
     try {
@@ -90,13 +112,23 @@ const AnnouncementTab = ({ navigation }) => {
         return (
           <ScrollView style={styles.scene}>
             {announcements.length > 0 ? (
-              announcements.map(({ id, title, content, createdAt, userName }) => (
+              announcements.map(({ id, title, content, userName }) => (
                 <Card key={id} style={styles.card}>
                   <Card.Content>
                     <Title style={styles.title}>{title}</Title>
-                    <Paragraph style={styles.paragraph}>{content}</Paragraph>
-                    <Text style={styles.paragraph}>Posted by {userName}</Text>
-
+                    {/* Check if content is a URL and make it clickable */}
+                    {isUrl(content) ? (
+                      <TouchableOpacity onPress={() => openUrl(content)}>
+                        <Paragraph style={[styles.paragraph, {color: 'blue'}]}>
+                          {content}
+                        </Paragraph>
+                      </TouchableOpacity>
+                    ) : (
+                      <Paragraph style={styles.paragraph}>{content}</Paragraph>
+                    )}
+                    <Text style={styles.paragraph}>
+                      Posted by <Text style={styles.paragraph1}>{userName === 'Neel' || userName === 'Vraj' || userName === 'Parthiv' ? "Yogi Cup Developers" : "Yogi Cup Team"}</Text>
+                    </Text>
                   </Card.Content>
                 </Card>
               ))
@@ -216,6 +248,10 @@ const styles = StyleSheet.create({
   paragraph: {
     fontSize: 14,
     color: '#666',
+  },
+  paragraph1: {
+    fontSize: 14,
+    color: colors.primary,
   },
   noContentText: {
     fontSize: 16,

@@ -14,14 +14,18 @@ const MyReels = ({ navigation }) => {
     const fetchImages = async () => {
       try {
         const user = auth.currentUser;
-        const q = query(collection(database, 'reels'), where("metadata.customMetadata.uploader", "==", user.displayName));
+        const q = query(
+          collection(database, 'reels'),
+          where("metadata.customMetadata.uploader", "==", user.displayName)
+          || where("metadata.customMetadata.userUID", "==", user.uid)
+        );
         const querySnapshot = await getDocs(q);
-
+  
         const imageList = querySnapshot.docs.map(doc => ({
           id: doc.id,
           url: doc.data().url,
         }));
-
+  
         setImages(imageList);
         setLoading(false);
       } catch (error) {
@@ -29,7 +33,7 @@ const MyReels = ({ navigation }) => {
         setLoading(false);
       }
     };
-
+  
     fetchImages();
   }, []);
 
