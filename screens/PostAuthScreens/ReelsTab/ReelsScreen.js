@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text, Alert, ActivityIndicator, Image, SafeAreaView } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text, Alert, ActivityIndicator, Image, SafeAreaView, Platform } from 'react-native';
 import { Camera } from 'expo-camera';
 import * as ImageManipulator from 'expo-image-manipulator';
 import * as ImagePicker from 'expo-image-picker';
@@ -158,31 +158,54 @@ const ReelsScreen = ({navigation}) => {
   };
   
 
-  const renderCameraView = () => (
-    <>
-      <SafeAreaView style={styles.iconContainer}>
-        <View style={styles.logoContainer}>
-          <Image source={yogiCupLogo} style={{ width: 50, height: 50}} />
-          <Text style={{ color: 'white', marginLeft: 20, fontSize: 25, fontWeight: 200}}>Reels</Text>
-        </View>
-        <TouchableOpacity onPress={() => navigation.navigate("My Feed")}>
-          <Icon name="people-outline" size={30} color="white" />
-        </TouchableOpacity>
-      </SafeAreaView>
-      <Camera ref={cameraRef} type={type} style={styles.preview} />
-      <View style={styles.snapButtonContainer}>
-        <TouchableOpacity onPress={takePicture} style={styles.capture}>
-          <Icon name='camera-outline' size={30} color="white" />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={flipCamera} style={styles.flipButton}>
-          <Icon name="camera-reverse-outline" size={30} color="white" />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={pickImageFromGallery} style={styles.galleryButton}>
-          <Icon name="image-outline" size={30} color="white" />
-        </TouchableOpacity>
+  const renderCameraView = () => {
+    // Check if the platform is Android
+    const isAndroid = Platform.OS === 'android';
+  
+    return (
+      <View style={styles.container}>
+        <SafeAreaView style={styles.iconContainer}>
+          <View style={styles.logoContainer}>
+            <Image source={yogiCupLogo} style={{ width: 50, height: 50 }} />
+            <Text style={{ color: 'white', marginLeft: 20, fontSize: 25, fontWeight: '200' }}>Reels</Text>
+          </View>
+          <TouchableOpacity onPress={() => navigation.navigate("My Feed")}>
+            <Icon name="albums-outline" size={30} color="white" />
+          </TouchableOpacity>
+        </SafeAreaView>
+        {isAndroid ? (
+          // Adjustments for Android users
+          <View style={styles.androidContainer}>
+            {/* <Text style={styles.androidMessage}>
+              Please upload from the gallery.
+            </Text> */}
+            <TouchableOpacity onPress={pickImageFromGallery} style={styles.galleryButtonAndroid}>
+              <Text style={styles.galleryButtonText}>Choose from Gallery</Text>
+              <Icon name="image-outline" size={30} color="white" />
+            </TouchableOpacity>
+          </View>
+        ) : (
+          // For non-Android users, show the full camera functionality
+          <>
+            <Camera ref={cameraRef} type={type} style={styles.preview} />
+            <View style={styles.snapButtonContainer}>
+              <TouchableOpacity onPress={takePicture} style={styles.capture}>
+                <Icon name='camera-outline' size={30} color="white" />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={flipCamera} style={styles.flipButton}>
+                <Icon name="camera-reverse-outline" size={30} color="white" />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={pickImageFromGallery} style={styles.galleryButton}>
+                <Icon name="image-outline" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          </>
+        )}
       </View>
-    </>
-  );
+    );
+  };
+  
+  
 
   const renderPreviewView = () => (
     <View style={styles.preview}>
@@ -230,6 +253,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)', // Adjust the alpha value (0.5 in this case)
   },
+  container1: {
+    zIndex: 0,
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Adjust the alpha value (0.5 in this case)
+  },
   iconContainer: {
     flex: 1,
     flexDirection: 'row',
@@ -254,6 +282,31 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     ...StyleSheet.hairlineWidth, // Make the camera preview full-screen
     flex: 1,
+  },
+  androidContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  androidMessage: {
+    textAlign: 'center',
+    fontSize: 16,
+    color: 'white',
+    marginBottom: 20, // Add some space between the text and the button
+  },
+  galleryButtonAndroid: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    padding: 20,
+    borderRadius: 50,
+  },
+  galleryButtonText: {
+    color: 'white',
+    marginRight: 10, // Space between text and icon
+    fontSize: 16,
   },
   capture: {
     backgroundColor: colors.primary,
